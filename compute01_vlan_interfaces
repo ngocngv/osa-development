@@ -1,0 +1,86 @@
+# This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# Source interfaces
+# Please check /etc/network/interfaces.d before changing this file
+# as interfaces may have been defined in /etc/network/interfaces.d
+# See LP: #1262951
+# source /etc/network/interfaces.d/*.cfg
+
+auto ens3
+iface ens3 inet static
+	address 118.69.135.198
+	netmask 255.255.255.0
+	gateway 118.69.135.1
+	dns-nameservers 8.8.8.8 8.8.4.4
+
+
+auto ens4
+iface ens4 inet static
+	address 192.168.1.120
+	netmask 255.255.255.0
+	gateway 192.168.1.1
+
+
+# Container management VLAN interface
+iface ens4.10 inet manual
+    vlan-raw-device ens4
+
+# OpenStack Networking VXLAN (tunnel/overlay) VLAN interface
+iface ens4.20 inet manual
+    vlan-raw-device ens4
+
+# Storage network VLAN interface (optional)
+iface ens4.30 inet manual
+    vlan-raw-device ens4
+
+
+# Container management bridge
+auto br-mgmt
+iface br-mgmt inet static
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    # Bridge port references tagged interface
+    bridge_ports ens4.10
+    address 172.29.236.52
+    netmask 255.255.252.0
+    dns-nameservers 8.8.8.8 8.8.4.4
+
+
+# OpenStack Networking VXLAN (tunnel/overlay) bridge
+auto br-vxlan
+iface br-vxlan inet static
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    # Bridge port references tagged interface
+    bridge_ports ens4.20
+    address 172.29.240.52
+    netmask 255.255.252.0
+
+
+# Storage bridge (optional)
+auto br-storage
+iface br-storage inet static
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    # Bridge port reference tagged interface
+    bridge_ports ens4.30
+    address 172.29.244.52
+    netmask 255.255.252.0
+
+
+# OpenStack Networking VLAN bridge
+auto br-vlan
+iface br-vlan inet manual
+    bridge_stp off
+    bridge_waitport 0
+    bridge_fd 0
+    # Bridge port references untagged interface
+    bridge_ports ens4
