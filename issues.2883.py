@@ -18,6 +18,6 @@ pip install --upgrade setuptools
 
 
 
-
+apt install python
 
 
