@@ -57,7 +57,7 @@ global_overrides:
           - nova_compute
 
 shared-infra_hosts:
-  infra01:
+  infra:
     # Rabbitmq, and galera are set to multiples to test clustering.
     affinity:
       galera_container: 3
@@ -65,33 +65,33 @@ shared-infra_hosts:
     ip: 118.69.135.191
 
 os-infra_hosts:
-  infra01:
+  infra:
     # Horizon is set to multiple to test clustering. This test only requires x2.
     affinity:
       horizon_container: 2
     ip: 118.69.135.191
 
 storage-infra_hosts:
-  infra01:
+  infra:
     ip: 118.69.135.191
 
 repo-infra_hosts:
-  infra01:
+  infra:
     ip: 118.69.135.191
 
 identity_hosts:
-  infra01:
+  infra:
     # Keystone is set to multiple to test clustering. This test only requires x2.
     affinity:
       keystone_container: 2
     ip: 118.69.135.191
 
 compute_hosts:
-  infra01:
+  infra:
     ip: 118.69.135.191
 
 storage_hosts:
-  infra01:
+  infra:
     ip: 118.69.135.191
     container_vars:
       cinder_backends:
@@ -102,13 +102,13 @@ storage_hosts:
           volume_backend_name: LVM_iSCSI
 
 log_hosts:
-  infra01:
+  infra:
     ip: 118.69.135.191
 
 network_hosts:
-  infra01:
+  infra:
     ip: 118.69.135.191
 
 haproxy_hosts:
-  infra01:
+  infra:
     ip: 118.69.135.191
