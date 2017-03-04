@@ -1,0 +1,37 @@
+# Ansible managed: /etc/ansible/roles/haproxy_server/templates/service.j2 modified on 2017-01-20 11:57:45 by root on infra01
+
+    
+frontend galera-front-1
+    bind 118.69.135.191:3306 
+    option tcplog
+    timeout client 5000s
+    acl white_list src 127.0.0.1/8 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8
+    tcp-request content accept if white_list
+    tcp-request content reject
+    mode tcp
+    default_backend galera-back
+
+frontend galera-front-2
+    bind 172.29.236.51:3306 
+    option tcplog
+    timeout client 5000s
+    acl white_list src 127.0.0.1/8 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8
+    tcp-request content accept if white_list
+    tcp-request content reject
+    mode tcp
+    default_backend galera-back
+
+
+backend galera-back
+    mode tcp
+    balance leastconn
+    timeout server 5000s
+    stick store-request src
+    stick-table type ip size 256k expire 30m
+    option tcplog
+    option mysql-check user monitoring
+
+    server infra01_galera_container-8fa6f3c7 172.29.239.10:3306 check port 3306 inter 12000 rise 1 fall 1
+
+    server infra01_galera_container-ac64dce6 172.29.237.153:3306 check port 3306 inter 12000 rise 2 fall 2 backup
+    server infra01_galera_container-a59d4db4 172.29.238.137:3306 check port 3306 inter 12000 rise 2 fall 2 backup
